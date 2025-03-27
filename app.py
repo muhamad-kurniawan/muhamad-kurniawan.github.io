@@ -1,25 +1,27 @@
-import ipywidgets as widgets
-from IPython.display import display
+import streamlit as st
 import numpy as np
 
-def simple_model(x):
-    return np.round(np.sin(sum(x)), 2)
+# A dummy function simulating a neural network's output
+def simple_model(inputs):
+    # For demonstration, just use a sine of the sum of inputs
+    return np.round(np.sin(sum(inputs)), 2)
 
-slider1 = widgets.FloatSlider(min=-5.0, max=5.0, value=0.0, description='Input 1:')
-slider2 = widgets.FloatSlider(min=-5.0, max=5.0, value=0.0, description='Input 2:')
-slider3 = widgets.FloatSlider(min=-5.0, max=5.0, value=0.0, description='Input 3:')
+st.title("Neural Network Simulation Game")
+st.write("Adjust the sliders to match the target output!")
 
-output = widgets.Output()
+# Create sliders for input variables
+x1 = st.slider("Input 1", -5.0, 5.0, 0.0)
+x2 = st.slider("Input 2", -5.0, 5.0, 0.0)
+x3 = st.slider("Input 3", -5.0, 5.0, 0.0)
 
-def update_output(change):
-    with output:
-        output.clear_output()
-        inputs = [slider1.value, slider2.value, slider3.value]
-        result = simple_model(inputs)
-        print("Output:", result)
-        
-slider1.observe(update_output, names='value')
-slider2.observe(update_output, names='value')
-slider3.observe(update_output, names='value')
+# Calculate model output
+output = simple_model([x1, x2, x3])
+st.write("Output:", output)
 
-display(slider1, slider2, slider3, output)
+# Define a target output for the game
+target_output = 0.87
+
+if output == target_output:
+    st.success("Congratulations! You hit the target output!")
+else:
+    st.info("Keep trying to match the target output!")
